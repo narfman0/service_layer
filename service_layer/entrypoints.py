@@ -26,8 +26,8 @@ _package = _package_of(entrypoints)
 for ep in pkg_resources.iter_entry_points(group='service_layer_group_id'):
   name = ep.name
   value = ep.load()
-  print "Handling " + name + " in " + value.__module__
+  print("Handling " + name + " in " + value.__module__)
   # add the entrypoint if it doesn't exist or the existing one is from this package
-  if entrypoints.has_key(name) == False or _package_of(entrypoints[name]) == _package:
+  if name not in entrypoints or _package_of(entrypoints[name]) == _package:
     entrypoints.add(name, value)
 

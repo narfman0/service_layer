@@ -1,0 +1,6 @@
+boto
+celery[redis]
+flower
+pyyaml
+requests
+simplejson

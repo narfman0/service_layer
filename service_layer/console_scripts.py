@@ -34,7 +34,7 @@ def flower():
 # {x[0]: x[1] for x in getmembers(sys.modules[__name__], isfunction) if x[0][0] != '_' and x[1].__module__ == __name__}
 callable_functions = {}
 if __name__ == '__console__':
-  print "This does not work with bpython"
+  print("This does not work with bpython")
 else:
   for func_tuple in getmembers(sys.modules[__name__], isfunction):
     if func_tuple[0][0] != '_': # name beginning with an underscore indicates private
@@ -47,4 +47,4 @@ if __name__ == '__main__':
       sys.exit(callable_functions[sys.argv[1]]())
   except (IndexError,):
     pass
-  print "Usage: {name} [{commands}]".format(name=__file__, commands='|'.join(callable_functions.keys()))
+  print("Usage: {name} [{commands}]".format(name=__file__, commands='|'.join(callable_functions.keys())))

@@ -7,9 +7,12 @@ https://github.com/pypa/sampleproject
 
 # Always prefer setuptools over distutils
 from setuptools import setup, find_packages
+from pip.req import parse_requirements as parse_reqs
 # To use a consistent encoding
 from codecs import open
+import functools
 import os
+import pkg_resources
 
 here = os.path.abspath(os.path.dirname(__file__))
 
@@ -17,13 +20,34 @@ here = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
+# Compatibility with older versions of pip
+pip_dist = pkg_resources.get_distribution('pip')
+pip_version = tuple(map(int, pip_dist.version.split('.')))
+
+# Use a base partial that will be updated depending on the version of pip
+parse_partial = functools.partial(parse_reqs, options=None)
+
+if pip_version < (1, 2):
+    # pip versions before 1.2 require an options keyword for using it outside
+    # of invoking a pip shell command
+    from pip.baseparser import parser
+    parse_partial.keywords['options'] = parser.parse_args()[0]
+
+if pip_version >= (1, 5):
+    # pip 1.5 introduced a session kwarg that is required in later versions
+    from pip.download import PipSession
+    parse_partial.keywords['session'] = PipSession()
+
+def parse_requirements(requirements_path='requirements.txt'):
+    return [str(req.req) for req in parse_partial(requirements_path)]
+
 setup(
     name='service_layer',
 
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.1.0',
+    version='0.1.1',
 
     description='a configuration plugin for Mobile Services Layer',
     long_description=long_description,
@@ -69,8 +93,7 @@ setup(
     # your project is installed. For an analysis of "install_requires" vs pip's
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['simplejson', 'celery[redis]', 'pyyaml', 'flower',
-                      'boto'],
+    install_requires=parse_requirements(),
 
     # If there are data files included in your packages that need to be
     # installed, specify them here.  If using Python 2.6 or less, then these

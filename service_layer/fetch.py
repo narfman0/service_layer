@@ -10,9 +10,9 @@ def always(*args, **kwargs):
 def fetch_and_cache(url, redis_connection, cache_control=always):
   if not cache_control():
     raise DataUnchanged
-  return redis_connection.set(hashlib.sha1(url).hexdigest(), requests.get(url).text)
+  return redis_connection.set(hashlib.sha1(url.encode('utf-8')).hexdigest(), requests.get(url).text)
 
 def cached_fetch(url, redis_connection, cache_control=always):
   if not cache_control():
     raise DataUnchanged
-  return redis_connection.get(hashlib.sha1(url).hexdigest())
+  return redis_connection.get(hashlib.sha1(url.encode('utf-8')).hexdigest())

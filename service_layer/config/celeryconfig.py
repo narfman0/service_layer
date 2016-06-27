@@ -6,7 +6,7 @@ http://celery.readthedocs.org/en/latest/configuration.html#example-configuration
 """
 
 from datetime import timedelta
-from const import REDIS_SERVER
+from service_layer.config.const import REDIS_SERVER
 
 BROKER_URL = 'redis://{hostname}:6379/0'.format(hostname=REDIS_SERVER)
 BROKER_TRANSPORT_OPTIONS = {

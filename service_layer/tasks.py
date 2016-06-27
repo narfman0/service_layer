@@ -1,9 +1,9 @@
 import os
 from celery import Celery
 from redis import Redis
+from service_layer.destinations import write
 from service_layer.entrypoints import entrypoints
-from fetch import fetch_and_cache, cached_fetch
-from destinations import write
+from service_layer.fetch import fetch_and_cache, cached_fetch
 
 redis = Redis(entrypoints.config.redis_server)
 
@@ -13,7 +13,7 @@ app.config_from_object(entrypoints.config.celeryconfig)
 @app.task
 def update_all():
   for feed in entrypoints.config:
-    print "destination: {destination}\nparser: {parser}\nurl: {url}\n\n".format(**feed)
+    print("destination: {destination}\nparser: {parser}\nurl: {url}\n\n".format(**feed))
     fetch_and_schedule.delay(feed)
 
 @app.task
@@ -26,4 +26,3 @@ def parse_from_cache(feed):
 def fetch_and_schedule(feed):
   fetch_and_cache(feed.url, redis)
   parse_from_cache.delay(feed)
-

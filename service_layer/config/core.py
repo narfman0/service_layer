@@ -22,8 +22,8 @@ Example:
 
 import os
 import yaml
-import celeryconfig
-from const import YAML, DESTINATION_PREFIX, REDIS_SERVER
+from service_layer.config import celeryconfig
+from service_layer.config.const import YAML, DESTINATION_PREFIX, REDIS_SERVER
 
 
 class ConfigDict(dict):
