@@ -3,7 +3,7 @@ import os
 import simplejson as json
 import re
 import boto
-from service_layer.entrypoints import entrypoints
+from service_layer.settings import DESTINATION_PREFIX
 
 class UnknowScheme(Exception):
   pass
@@ -49,13 +49,13 @@ def scheme_handler_s3(uri, data):
 
 def scheme_handler_file(uri, data):
   filepath = parse_uri(uri)['fullpath']
-  filepath = os.path.join(entrypoints.config.destination_prefix, filepath)
+  filepath = os.path.join(DESTINATION_PREFIX, filepath)
   path = os.path.dirname(filepath)
   if not os.path.exists(path):
     os.makedirs(path)
   with open(filepath, 'w') as fh:
     fh.write(data)
-  
+
 pattern_uri = re.compile('^(?P<uri>(?P<scheme>\w+)://(?P<fullpath>(?P<dirname>(?P<authority>[^/]*)(?P<path>.*/))?(?P<basename>[^/]*)))')
 scheme_handlers = {
   's3': scheme_handler_s3,

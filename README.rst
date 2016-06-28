@@ -39,8 +39,7 @@ Process Flow
 Usage
 ~~~~~
 
-#. Modify ``celeryconfig.py`` to point to your Redis server
-#. Define a ``config.yml`` file. (sample.yml has been provided)
+#. Modify ``settings.py`` to point to your Redis server
 #. Define a parser. (a Python function that takes a string as an argument and returns a modified string.)
 #. Add AWS credentials
 #. Use the included tools to start the workers, flower and celerybeat
@@ -60,4 +59,3 @@ Tools included in the project
 -  ``msl_flower``
 
    -  Starts a Celery monitoring and managing web app
-

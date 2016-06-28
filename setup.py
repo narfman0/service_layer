@@ -47,7 +47,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.1.1',
+    version='0.2.0',
 
     description='a configuration plugin for Mobile Services Layer',
     long_description=long_description,
@@ -80,6 +80,7 @@ setup(
         # Specify the Python versions you support here. In particular, ensure
         # that you indicate whether you support Python 2, Python 3 or both.
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.5',
     ],
 
     # What does your project relate to?
@@ -98,19 +99,13 @@ setup(
     # If there are data files included in your packages that need to be
     # installed, specify them here.  If using Python 2.6 or less, then these
     # have to be included in MANIFEST.in as well.
-    package_data={
-        'service_layer': ['config/config.sample.yml'],
-    },
+    package_data={},
 
 
     # To provide executable scripts, use entry points in preference to the
     # "scripts" keyword. Entry points provide cross-platform support and allow
     # pip to create the appropriate form of executable for the target platform.
     entry_points={
-        'service_layer_group_id': [
-            'config=service_layer.config:config_object',
-            'parser_example=service_layer.parsers:parser_example',
-        ],
         'console_scripts': [
             'msl_worker=service_layer.console_scripts:worker',
             'msl_beat=service_layer.console_scripts:beat',

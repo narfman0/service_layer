@@ -1,11 +1,8 @@
 """
-A collection of parsers that should match those listed in the config YAML file.
-
-Each parser must be added as an entrypoint. This allows MSL plugins that only
-define parsers.
+A collection of parsers that should match those listed in the settings file.
 """
 
 
-def parser_example(data):
+def parser_passthrough(data):
     """Manipulate incoming data and return the modified data."""
     return data
