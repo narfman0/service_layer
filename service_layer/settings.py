@@ -25,7 +25,7 @@ CELERY_TIMEZONE = 'UTC'
 CELERYBEAT_SCHEDULE = {
     'update_all-on-interval': {
         'task': 'service_layer.tasks.update_all',  # complete name is needed
-        'schedule': timedelta(seconds=10),
+        'schedule': timedelta(seconds=30),
         'args': (),
     },
 }

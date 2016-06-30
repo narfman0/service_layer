@@ -1,9 +1,12 @@
 from __future__ import print_function
+import mimetypes
 import os
 import sys
 import simplejson as json
 import re
 import boto
+import gzip
+import tempfile
 from service_layer.settings import DESTINATION_PREFIX
 
 
@@ -51,11 +54,22 @@ def parse_uri(uri):
 
 def scheme_handler_s3(uri, data):
   parsed_uri = parse_uri(uri)
+  content_type, encoding = mimetypes.guess_type(uri)
+  content_type = content_type or 'application/json'
+  headers = { 'Content-Type': content_type, 'x-amz-acl': 'public-read' }
   s3 = boto.connect_s3()
   bucket = s3.get_bucket(parsed_uri['authority'])
-  key = bucket.new_key(parsed_uri['path'] + parsed_uri['basename'])
-  key.content_type = 'application/json'
-  key.set_contents_from_string(data, policy='public-read')
+  key_name = parsed_uri['path'].lstrip('/') + parsed_uri['basename']
+  key = bucket.new_key(key_name)
+  key.content_type = content_type
+  if key_name.endswith('gz'):
+    headers['Content-Encoding'] = encoding
+    gz_path = os.path.join(tempfile.gettempdir(), key_name)
+    with gzip.open(gz_path, 'wb') as f:
+      f.write(data.encode())
+    key.set_contents_from_filename(gz_path, headers=headers)
+  else:
+    key.set_contents_from_string(data, headers=headers)
 
 
 def scheme_handler_file(uri, data):
