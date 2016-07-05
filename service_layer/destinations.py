@@ -66,7 +66,9 @@ def scheme_handler_s3(uri, data):
     headers['Content-Encoding'] = encoding
     gz_path = os.path.join(tempfile.gettempdir(), key_name)
     with gzip.open(gz_path, 'wb') as f:
-      f.write(data.encode())
+      if sys.version_info >= (3, 0):
+        data = data.encode()
+      f.write(data)
     key.set_contents_from_filename(gz_path, headers=headers)
   else:
     key.set_contents_from_string(data, headers=headers)
