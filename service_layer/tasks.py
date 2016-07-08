@@ -6,7 +6,7 @@ from service_layer.fetch import fetch_and_cache, cached_fetch
 from service_layer import settings
 
 
-redis = Redis(settings.REDIS_SERVER)
+redis = Redis(settings.REDIS_SERVER, decode_responses=True)
 app = Celery('service_layer') # without this explicit name Celery will list the app as "__main__"
 app.config_from_object(settings)
 
